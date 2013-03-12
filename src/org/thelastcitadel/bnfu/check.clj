@@ -11,9 +11,14 @@
       {:result [:doublequote]
        :rest (rest cs)})))
 
+(def charset
+  #{\> \< \: \=})
+
 (defn text [cs]
   (when (seq cs)
-    (let [x (take-while #(Character/isJavaIdentifierPart %) cs)]
+    (let [x (take-while #(or (Character/isJavaIdentifierPart %)
+                             (charset %))
+                        cs)]
       (when (seq x)
         {:result [:text (apply str x)]
          :rest (drop (count x) cs)}))))
@@ -29,7 +34,7 @@
 
 (defn EOL [s]
   (when (seq s)
-    (when (= \n (first s))
+    (when (= \newline (first s))
       {:result [:EOL]
        :rest (rest s)})))
 
