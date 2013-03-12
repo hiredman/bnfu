@@ -1,8 +1,8 @@
 <syntax>         ::= <rule> | <rule> <syntax>
 <rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
 <opt-whitespace> ::= "" | " " <opt-whitespace>
-<expression>     ::= <expression list> | <expression list> "|" <expression>
-<line-end>       ::= <opt-whitespace> <EOL> | <line-end> <line-end>
+<expression>     ::= <expression list> | <expression list> <opt-whitespace> "|" <opt-whitespace> <expression>
+<line-end>       ::= EOL
 <expression list>          ::= <term> | <term> <opt-whitespace> <expression list>
 <term>           ::= <literal> | "<" <rule-name> ">"
 <literal>        ::= <doublequote> <text> <doublequote>
