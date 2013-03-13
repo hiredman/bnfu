@@ -180,7 +180,7 @@
      (when (seq ~'s)
        (when-let [x# ~expression]
          {:rest (:rest x#)
-          :result [~(keyword (name rule-name)) (:result x#)]}))))
+          :result [[~(keyword (name rule-name)) (:result x#)]]}))))
 
 (defmethod expand* :rule-name [[_ n]]
   (symbol (.replaceAll n " " "-")))
@@ -188,7 +188,7 @@
 (defmethod expand* :terminal [[_ x]]
   (if (vector? x)
     `(when (character-match ~(second x) ~'s)
-       {:result [:terminal [:literal ~(second x)]]
+       {:result [[:terminal [:literal ~(second x)]]]
         :rest (drop ~(count (second x)) ~'s)})
     `(~x ~'s)))
 
@@ -202,7 +202,23 @@
                   r2# ~x]
               (when r2#
                 {:rest (:rest r2#)
-                 :result [(:result r#) (:result r2#)]}))))
+                 :result (conj (:result r#) (:result r2#))}))))
+       (first expressions)
+       (rest expressions))
+      {::type ::and})
+    (first expressions)))
+
+(defn and-up [expressions]
+  (if (> (count expressions) 1)
+    (with-meta
+      (reduce
+       (fn [e x]
+         `(when-let [r# ~e]
+            (let [~'s (:rest r#)
+                  r2# ~x]
+              (when r2#
+                {:rest (:rest r2#)
+                 :result (vec (concat (:result r#) (:result r2#)))}))))
        (first expressions)
        (rest expressions))
       {::type ::and})
@@ -215,17 +231,10 @@
       (if (seq s)
         `(or ~(and-up (rest s))
              ~(and-up f))
-        (and-up (for [e f
-                      x (if (and (seq? e)
-                                 (= ::and (::type (meta e))))
-                          (rest e)
-                          [e])]
-                  x))))))
+        (and-up f)))))
 
 (defmethod expand* :elist [[_ & anded]]
-  (if (= 1 (count anded))
-    (first anded)
-    (and-up anded)))
+  (and-up anded))
 
 (defn expand [s]
   (walk/postwalk
