@@ -188,7 +188,7 @@
 (defmethod expand* :terminal [[_ x]]
   (if (vector? x)
     `(when (character-match ~(second x) ~'s)
-       {:result [:terminal ~(second x)]
+       {:result [:terminal [:literal ~(second x)]]
         :rest (drop ~(count (second x)) ~'s)})
     `(~x ~'s)))
 
