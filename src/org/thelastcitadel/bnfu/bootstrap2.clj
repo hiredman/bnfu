@@ -11,7 +11,8 @@
 
 (defn opt-text [parse-stream]
   (let [cs (take-while #(or (Character/isJavaIdentifierPart %)
-                            (#{\> \< \: \= \| \space \-} %)) parse-stream)]
+                            (#{\> \< \: \= \| \space \- \. \, \) \( \? \'
+                               \+ \* \/ \\ \^ \~ \# \$ \& \@} %)) parse-stream)]
     [{:result [[:opt-text (apply str cs)]]
       :rest (drop (count cs) parse-stream)}]))
 
@@ -113,3 +114,5 @@
   (bnf->clojure i))
 
 (bnf "example.bnf")
+
+
