@@ -12,6 +12,8 @@ grammars can cause the parsers to blow the stack, etc.
 
 ## Usage
 
+`[org.thelastcitadel/bnfu 0.0.1]` in your project.clj
+
 ```clojure
 (bnf "foo/bar.bnf")
 ```
