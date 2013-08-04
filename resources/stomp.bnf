@@ -1,0 +1,9 @@
+<frame>          ::= <command> <EOL> <headers> <EOL> <octets> <NULL> <eols>
+<command>        ::= <client-command> | <server-command>
+<EOL>            ::= <CR> <LF> | <LF> 
+<frame-stream>   ::= <frame> | <frame> <frame-stream>
+<headers>        ::= "" | <header> <EOL> | <header> <EOL> <headers>
+<eols>           ::= "" | <EOL> | <EOL> <eols>
+<client-command> ::= "SEND" | "SUBSCRIBE" | "UNSUBSCRIBE" | "BEGIN" | "COMMIT" | "ABORT" | "ACK" | "NACK" | "DISCONNECT" | "CONNECT" | "STOMP"
+<server-command> ::= "CONNECTED" | "MESSAGE" | "RECEIPT" | "ERROR"
+<header>         ::= <header-name> ":" <header-value>
