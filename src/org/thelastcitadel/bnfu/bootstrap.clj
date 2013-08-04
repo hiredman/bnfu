@@ -236,6 +236,19 @@
 (defmethod expand* :elist [[_ & anded]]
   (and-up anded))
 
+(defn strip [s tag]
+  (walk/postwalk
+   (fn [x]
+     (if (vector? x)
+       (vec (for [i x
+                  ii (if (and (vector? i)
+                              (= tag (first i)))
+                       []
+                       [i])]
+              ii))
+       x))
+   s))
+
 (defn expand [s]
   (walk/postwalk
    (fn [x]
@@ -248,3 +261,25 @@
                        ii)))
        x))
    s))
+
+
+(defmulti compile* first)
+
+(defmethod compile* :syntax [[_ & args]]
+  (case (count args)
+    1 `(do ~(compile* (first args)))
+    2 (let [x (compile* (first args))
+            [_ & ys] (compile* (second args))]
+           `(do ~x ~@ys))))
+
+(defmethod compile* :rule [[_ _ rule-name _ _ _ body]]
+  `(defn ~(compile* rule-name) [~'cs]
+     ~(compile* body)))
+
+(defmethod compile* :rule-name [[_ n]]
+  (symbol n))
+
+(defmethod compile* :expression [expression]
+  (prn expression)
+  (throw (Exception.)))
+
