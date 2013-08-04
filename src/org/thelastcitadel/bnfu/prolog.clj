@@ -16,9 +16,15 @@
       [{:result [[:uppercase-letter (first parse-stream)]]
         :rest (rest parse-stream)}])))
 
+(defn EOL [parse-stream]
+  (when (= \newline (first parse-stream))
+    [{:result [[:EOL]]
+      :rest (rest parse-stream)}]))
+
 (bnf "prolog.bnf")
 
 (comment
 
   (parse-program
-   "male(james1)."))
+   "male(james1).
+?- likes(mary,food)."))

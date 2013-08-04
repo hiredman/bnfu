@@ -1,12 +1,12 @@
-<program> ::= <clause-list> <query> | <query>
-<clause-list> ::= <clause> | <clause> <clause-list>
-<clause> ::= <predicate> "." | <predicate> ":-" <predicate-list> "."
-<predicate-list> ::= <predicate> | <predicate> "," <predicate-list> 
+<program> ::= <clause-list> <opt-line-end> <query> | <query>
+<clause-list> ::= <clause> | <opt-whitespace> <clause> <opt-whitespace> <clause-list> <opt-whitespace>
+<clause> ::= <predicate> "." | <predicate> ":-" <predicate-list> "." <opt-line-end>
+<predicate-list> ::= <predicate> | <opt-whitespace> <predicate> <opt-whitespace> "," <opt-whitespace> <predicate-list> <opt-whitespace>
 <predicate> ::= <atom> | <atom> "(" <term-list> ")"
-<term-list> ::= <term> |  <term> "," <term-list> 
+<term-list> ::= <term> | <opt-whitespace> <term> <opt-whitespace> "," <opt-whitespace> <term-list> 
 <term> ::= <numeral> | <atom> | <variable> | <structure>
 <structure> ::= <atom> "(" <term-list> ")"
-<query> ::= "?-" <opt-whitespace> <predicate-list> <opt-whitespace> "."
+<query> ::= <opt-whitespace> "?-" <opt-whitespace> <predicate-list> <opt-whitespace> "." <opt-whitespace>
 <atom> ::= <small-atom> | "'" <string> "'"
 <small-atom> ::= <lowercase-letter> <string> | <lowercase-letter>
 <variable> ::= <uppercase-letter> | <character> <variable>
@@ -17,3 +17,5 @@
 <string> ::= <character> | <character> <string>
 <opt-whitespace>  ::= "" | <whitespace> <opt-whitespace>
 <whitespace>      ::= " "
+<line-end>        ::= <EOL> | <whitespace> <line-end>
+<opt-line-end>    ::= "" | <line-end>
