@@ -20,7 +20,7 @@ grammars can cause the parsers to blow the stack, etc.
 
 where foo/bar.bnf is a bnf as a file on the classpath well generate
 functions for the parser (bnf is a macro), with a main entry point
-named after the first rule in the grammar like parse-<rule-name>.
+named after the first rule in the grammar like parse-{rule-name}.
 
 the parse tree is hiccup style.
 
