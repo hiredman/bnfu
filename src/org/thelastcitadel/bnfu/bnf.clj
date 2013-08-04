@@ -1,6 +1,5 @@
-(ns org.thelastcitadel.bnfu.bootstrap2
+(ns org.thelastcitadel.bnfu.bnf
   (:require [clojure.java.io :as io]
-            [org.thelastcitadel.bnfu.generate :refer :all]
             [org.thelastcitadel.bnfu.primitives :refer :all]))
 
 (def doublequote (lit "\""))

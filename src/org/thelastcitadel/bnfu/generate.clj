@@ -1,6 +1,7 @@
 (ns org.thelastcitadel.bnfu.generate
   (:require [clojure.java.io :as io]
-            [org.thelastcitadel.bnfu.primitives :refer :all]))
+            [org.thelastcitadel.bnfu.primitives :refer :all]
+            [org.thelastcitadel.bnfu.bnf :refer [syntax]]))
 
 (defmulti expression->clj first)
 
@@ -58,10 +59,8 @@
      2 (cons (first body)
              (syntax->rules (second body))))))
 
-(intern (create-ns 'org.thelastcitadel.bnfu.bootstrap2) 'syntax)
-
 (defn bnf->clojure [bnf]
-  (let [rules (->> (parse (slurp (io/resource bnf)) [org.thelastcitadel.bnfu.bootstrap2/syntax] [])
+  (let [rules (->> (parse (slurp (io/resource bnf)) [syntax] [])
                    (first)
                    (:result)
                    (first)

@@ -1,12 +1,5 @@
 (ns org.thelastcitadel.bnfu
-  (:require [clojure.java.io :as io]
-            [org.thelastcitadel.bnfu.generate :refer :all]
-            [org.thelastcitadel.bnfu.bootstrap2 :refer [rule-name
-                                                        EOL
-                                                        doublequote
-                                                        opt-text]]))
+  (:require [org.thelastcitadel.bnfu.generate :refer [bnf->clojure]]))
 
-(bnf "bnfu/bnf.bnf")
-
-(defn parse-bnf [sequable]
-  (parse-syntax sequable))
+(defmacro bnf [i]
+  (bnf->clojure i))
