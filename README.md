@@ -10,6 +10,9 @@ The generated parsers take seqs as inputs.
 The generated parsers are not perfect, certain formulations of
 grammars can cause the parsers to blow the stack, etc.
 
+bnfu is bootstrapped, I hand wrote a parser for bnfs, fed it a bnf of
+bnf, an generated a new parser from that parse tree.
+
 ## Usage
 
 `[org.thelastcitadel/bnfu 0.0.1]` in your project.clj
