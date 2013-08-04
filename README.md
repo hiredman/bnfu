@@ -27,7 +27,7 @@ the parse tree is hiccup style.
 see `org.thelastcitadel.bnfu.prolog` and
 `org.thelastcitadel.bnfu.stomp` for examples.
 
-if you reference a rule, but leave at a definition you can hand write
+if you reference a rule, but leave out a definition you can hand write
 the function for that rule.
 
 ## License
