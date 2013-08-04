@@ -1,8 +1,7 @@
 (ns org.thelastcitadel.bnfu.prolog
   (:require [clojure.java.io :as io]
-            [org.thelastcitadel.bnfu.generate :refer :all]
-            [org.thelastcitadel.bnfu.primitives :refer :all]
-            [org.thelastcitadel.bnfu.bootstrap2 :refer [bnf]]))
+            [org.thelastcitadel.bnfu.generate :refer [bnf]]
+            [org.thelastcitadel.bnfu.bootstrap2]))
 
 (defn lowercase-letter [parse-stream]
   (when (seq parse-stream)
@@ -21,7 +20,8 @@
     [{:result [[:EOL]]
       :rest (rest parse-stream)}]))
 
-(bnf "prolog.bnf")
+(declare parse-program)
+(bnf "bnfu/prolog.bnf")
 
 (comment
 

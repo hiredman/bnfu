@@ -3,10 +3,6 @@
             [org.thelastcitadel.bnfu.generate :refer :all]
             [org.thelastcitadel.bnfu.primitives :refer :all]))
 
-(defn characters []
-  (with-open [r (io/input-stream (io/resource "example.bnf"))]
-    (doall (map char (take-while (partial not= -1) (repeatedly #(.read r)))))))
-
 (def doublequote (lit "\""))
 
 (defn opt-text [parse-stream]
@@ -96,23 +92,3 @@
  bnf-comment
  [parse-stream]
  (parse parse-stream [(lit "--") opt-text line-end] []))
-
-(defn bnf->clojure [bnf]
-  (let [rules (->> (parse (slurp (io/resource bnf)) [syntax] [])
-                   (first)
-                   (:result)
-                   (first)
-                   (syntax->rules)
-                   (map rule-exp->clj))]
-    `(do
-       (declare ~@(map second rules))
-       ~@rules
-       (defn ~(symbol (str "parse-" (name (second (first rules))))) [~'parse-stream]
-         (first (parse ~'parse-stream [~(second (first rules))] []))))))
-
-(defmacro bnf [i]
-  (bnf->clojure i))
-
-(bnf "example.bnf")
-
-

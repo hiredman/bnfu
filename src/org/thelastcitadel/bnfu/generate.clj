@@ -58,36 +58,20 @@
      2 (cons (first body)
              (syntax->rules (second body))))))
 
-(comment
-  (:syntax
-   (:rule
-    (:opt-whitespace [""])
-    ["<"]
-    [:rule-name "character"]
-    [">"]
-    (:opt-whitespace
-     (:whitespace [" "])
-     (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""])))
-    ["::="]
-    (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-    (:expression
-     (:expression-list
-      (:term ["<"] [:rule-name "lowercase-letter"] [">"]))
-     (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-     ["|"]
-     (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-     (:expression
-      (:expression-list
-       (:term ["<"] [:rule-name "uppercase-letter"] [">"]))
-      (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-      ["|"]
-      (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-      (:expression
-       (:expression-list (:term ["<"] [:rule-name "digit"] [">"]))
-       (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-       ["|"]
-       (:opt-whitespace (:whitespace [" "]) (:opt-whitespace [""]))
-       (:expression
-        (:expression-list (:term ["<"] [:rule-name "
-special"] [">"]))))))
-    (:line-end [:EOL]))))
+(intern (create-ns 'org.thelastcitadel.bnfu.bootstrap2) 'syntax)
+
+(defn bnf->clojure [bnf]
+  (let [rules (->> (parse (slurp (io/resource bnf)) [org.thelastcitadel.bnfu.bootstrap2/syntax] [])
+                   (first)
+                   (:result)
+                   (first)
+                   (syntax->rules)
+                   (map rule-exp->clj))]
+    `(do
+       (declare ~@(map second rules))
+       ~@rules
+       (defn ~(symbol (str "parse-" (name (second (first rules))))) [~'parse-stream]
+         (first (parse ~'parse-stream [~(second (first rules))] []))))))
+
+(defmacro bnf [i]
+  (bnf->clojure i))
